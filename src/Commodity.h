@@ -17,7 +17,8 @@ private:
     int rarity; // 1-10, higher means rarer
 
 public:
-    // Constructor
+    // Constructors
+    Commodity();  // 添加默认构造函数
     Commodity(const std::string& commodityName, const std::string& commodityDesc, 
               double price, int commodityRarity);
     
