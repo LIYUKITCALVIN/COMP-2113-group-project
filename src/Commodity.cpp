@@ -1,5 +1,8 @@
 #include "Commodity.h"
 
+Commodity::Commodity() 
+    : name(""), description(""), basePrice(0.0), rarity(1) {}
+
 Commodity::Commodity(const std::string& commodityName, const std::string& commodityDesc, 
                      double price, int commodityRarity)
     : name(commodityName), description(commodityDesc), basePrice(price), rarity(commodityRarity) {}
