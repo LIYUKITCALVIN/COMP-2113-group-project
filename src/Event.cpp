@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include "Planet.h" 
 
 Event::Event(EventType eventType, const std::string& eventDesc, 
              double money, int fuel, int damage, const std::string& item)
