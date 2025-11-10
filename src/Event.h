@@ -4,7 +4,7 @@
 #include <string>
 #include "Player.h"
 #include "Spaceship.h"
-
+#include "Planet.h"
 /**
  * @enum EventType
  * @brief Types of random events that can occur during travel
