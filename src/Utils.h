@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 #include <limits>
-#include <cstdlib>  // 添加这一行
-#include <ctime>    // 添加这一行
+#include <cstdlib>
+#include <ctime>
 
 /**
  * @namespace Utils
@@ -74,7 +74,7 @@ namespace Utils {
     inline int randomInt(int min, int max) {
         static bool seeded = false;
         if (!seeded) {
-            std::srand(std::time(0));  // 现在应该可以工作了
+            std::srand(std::time(0));
             seeded = true;
         }
         return min + (std::rand() % (max - min + 1));
@@ -89,7 +89,7 @@ namespace Utils {
     inline double randomDouble(double min, double max) {
         static bool seeded = false;
         if (!seeded) {
-            std::srand(std::time(0));  // 现在应该可以工作了
+            std::srand(std::time(0));
             seeded = true;
         }
         return min + static_cast<double>(std::rand()) / RAND_MAX * (max - min);
