@@ -112,8 +112,10 @@ void Game::initializePlanets() {
     planets[5].setPrice("Mutant Sample", 1500.0, 1200.0);
     planets[5].setPrice("Oasis Map Fragment", 2000.0, 1500.0);
     
-    // Discover starting planet
-    planets[0].discover();
+    // Discover starting planets
+for (int i = 0; i < 5; i++) {  // 发现前5个，不包括Oasis
+    planets[i].discover();
+}
 }
 
 void Game::setupDifficulty(int diff) {
