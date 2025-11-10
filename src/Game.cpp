@@ -72,7 +72,7 @@ void Game::initializeCommodities() {
     commodities["Food Rations"] = Commodity("Food Rations", "Essential survival food", 50.0, 1);
     commodities["Water"] = Commodity("Water", "Clean drinking water", 30.0, 1);
     commodities["Medicine"] = Commodity("Medicine", "Medical supplies", 100.0, 3);
-    commodities("Electronics"] = Commodity("Electronics", "Salvaged electronic components", 150.0, 4);
+    commodities["Electronics"] = Commodity("Electronics", "Salvaged electronic components", 150.0, 4);
     
     // Rare commodities for nuclear waste planets
     commodities["Nuclear Alloy"] = Commodity("Nuclear Alloy", "Radiation-resistant metal", 300.0, 8);
