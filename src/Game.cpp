@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Utils.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -14,11 +15,21 @@ void Game::run() {
 }
 
 void Game::mainMenu() {
-    Utils::printTitle("NUCLEAR ASHES: SPACE TRADER");
-    std::cout << "1. New Game" << std::endl;
-    std::cout << "2. Load Game" << std::endl;
-    std::cout << "3. Exit" << std::endl;
+    Utils::clearScreen();
     
+    Utils::printColoredTitle("NUCLEAR ASHES: SPACE TRADER",true);
+    Utils::reset();
+    Utils::setGreen();
+    std::cout << "1. New Game" << std::endl;
+    Utils::reset();
+    Utils::setYellow();
+    std::cout << "2. Load Game" << std::endl;
+    Utils::reset();
+    Utils::setRed();
+    std::cout << "3. Exit" << std::endl;
+    Utils::reset();
+
+    Utils::printThickSeparator();
     std::cout << "Choose an option: ";
     int choice = Utils::getValidatedInt(1, 3);
     
@@ -203,9 +214,26 @@ void Game::processTurn() {
 }
 
 void Game::displayStatus() const {
+    Utils::setBlue();
+    std::cout << "=== PLAYER STATUS ===" << std::endl;
+    Utils::reset();
+    Utils::setGreen();
     player.displayStatus();
+    Utils::reset();
+
+    Utils::setYellow();
+    std::cout << "=== SPACECRAFT STATUS ===" << std::endl;
+    Utils::reset();
+    
+    Utils::setCyan();
     spaceship.displayStatus();
+    Utils::reset();
+
+    Utils::setGreen();
     std::cout << "Oasis Map Fragments: " << oasisFragments << "/3" << std::endl;
+    Utils::reset();
+    
+    Utils::printSeparator();
 }
 
 void Game::displayCurrentPlanet() const {
