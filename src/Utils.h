@@ -21,6 +21,7 @@ namespace Utils {
     constexpr const char* COLOR_RED = "\033[31m";
     constexpr const char* COLOR_BLUE = "\033[34m";
     constexpr const char* COLOR_CYAN = "\033[36m";
+
     /**
      * @brief Clear the input buffer
      */
@@ -107,6 +108,7 @@ namespace Utils {
     inline void printSeparator() {
         std::cout << "----------------------------------------" << std::endl;
     }
+
     inline void printThickSeparator() {
         std::cout << "========================================" << std::endl;
     }
@@ -119,7 +121,7 @@ namespace Utils {
         std::cout << "\n=== " << title << " ===" << std::endl;
     }
      
-     /**
+    /**
      * @brief Print a colored title with thick separators (enhanced UI)
      * @param title The title to print
      * @param isImportant Whether to use green (true) or blue (false)
@@ -140,15 +142,15 @@ namespace Utils {
         std::cout << "\nPress Enter to continue...";
         std::cin.get();
     }
-}
-     /**
-     * @brief Clear the screen (Linux/Mac native command)
+
+    /**
+     * @brief Clear the screen
      */
     inline void clearScreen() {
-        system("clear"); // Linux/Mac 通用清屏命令
+        system("clear"); 
     }
 
-    // 快捷函数：直接用颜色码，无需额外封装（简化调用）
+    //
     inline void setGreen() { std::cout << COLOR_GREEN; }
     inline void setYellow() { std::cout << COLOR_YELLOW; }
     inline void setRed() { std::cout << COLOR_RED; }
@@ -156,6 +158,6 @@ namespace Utils {
     inline void setCyan() { std::cout << COLOR_CYAN; }
     inline void reset() { std::cout << COLOR_RESET; }
 
-}
+}  //
 
 #endif
