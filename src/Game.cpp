@@ -215,14 +215,7 @@ void Game::processTurn() {
 
 void Game::displayStatus() const {
     Utils::setBlue();
-    std::cout << "=== PLAYER STATUS ===" << std::endl;
-    Utils::reset();
-    Utils::setGreen();
     player.displayStatus();
-    Utils::reset();
-
-    Utils::setYellow();
-    std::cout << "=== SPACECRAFT STATUS ===" << std::endl;
     Utils::reset();
     
     Utils::setCyan();
