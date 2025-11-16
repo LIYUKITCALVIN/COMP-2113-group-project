@@ -508,7 +508,9 @@ void Game::upgradeSpaceship() {
 }
 
 void Game::repairSpaceship() {
+    Utils::setBlue();
     Utils::printTitle("REPAIR SPACESHIP");
+    Utils::reset();
     
     int damage = spaceship.getMaxDurability() - spaceship.getDurability();
     if (damage == 0) {
