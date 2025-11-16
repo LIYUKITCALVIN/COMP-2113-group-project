@@ -233,8 +233,7 @@ void Game::displayStatus() const {
     Utils::setBlue();
     player.displayStatus();
     Utils::reset();
-    
-    Utils::setCyan();
+    Utils::setBlue();
     spaceship.displayStatus();
     Utils::reset();
 
