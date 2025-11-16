@@ -3,6 +3,7 @@
 #include <random>
 #include <vector>
 #include "Planet.h" 
+#include "Utils.h"
 
 Event::Event(EventType eventType, const std::string& eventDesc, 
              double money, int fuel, int damage, const std::string& item)
@@ -32,7 +33,9 @@ std::string Event::getTypeString() const {
 }
 
 void Event::execute(Player& player, Spaceship& ship) {
+    Utils::setBlue();
     std::cout << "\n=== RANDOM EVENT ===" << std::endl;
+    Utils::reset();
     std::cout << description << std::endl;
     
     // Apply money effect
