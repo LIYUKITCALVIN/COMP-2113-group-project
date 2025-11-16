@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Utils.h"
 #include <iostream>
 #include <iomanip>
 
@@ -57,7 +58,9 @@ int Player::getTotalCargo() const {
 }
 
 void Player::displayStatus() const {
+    Utils::setBlue();
     std::cout << "\n=== PLAYER STATUS ===" << std::endl;
+    Utils::reset();
     std::cout << "Money: $" << std::fixed << std::setprecision(2) << money << std::endl;
     std::cout << "Cargo: " << getTotalCargo() << " units" << std::endl;
     
