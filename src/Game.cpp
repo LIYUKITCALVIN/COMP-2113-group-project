@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+using namespace std;
 
 Game::Game() : gameRunning(false), totalTurns(50), currentTurn(0), difficulty(1), oasisFragments(0) {}
 
@@ -17,7 +18,7 @@ void Game::run() {
 void Game::mainMenu() {
     Utils::clearScreen();
     
-    Utils::printColoredTitle("NUCLEAR ASHES: SPACE TRADER",true);
+    Utils::printColoredTitle("NUCLEAR ASHES: SPACE TRADER",false);
     Utils::reset();
     Utils::setGreen();
     std::cout << "1. New Game" << std::endl;
@@ -42,18 +43,26 @@ void Game::mainMenu() {
             break;
         case 3:
             gameRunning = false;
+            
             std::cout << "Thanks for playing!" << std::endl;
             break;
     }
 }
 
 void Game::newGame() {
-    Utils::printTitle("NEW GAME");
-    std::cout << "Select Difficulty:" << std::endl;
-    std::cout << "1. Easy (More money, lower risks)" << std::endl;
-    std::cout << "2. Medium (Balanced)" << std::endl;
-    std::cout << "3. Hard (Less money, higher risks)" << std::endl;
+    Utils::clearScreen();
+    Utils::printColoredTitle("NEW GAME", false);
     
+    std::cout << "Select Difficulty:" << std::endl;
+    Utils::setGreen();
+    std::cout << "1. Easy (More money, lower risks)" << std::endl;
+    Utils::reset();
+    Utils::setYellow();
+    std::cout << "2. Medium (Balanced)" << std::endl;
+    Utils::reset();
+    Utils::setRed();
+    std::cout << "3. Hard (Less money, higher risks)" << std::endl;
+    Utils::reset();
     std::cout << "Choose difficulty: ";
     difficulty = Utils::getValidatedInt(1, 3);
     
@@ -164,12 +173,19 @@ void Game::setupDifficulty(int diff) {
 void Game::gameLoop() {
     while (currentTurn < totalTurns && gameRunning) {
         currentTurn++;
-        std::cout << "\n\n=== TURN " << currentTurn << "/" << totalTurns << " ===" << std::endl;
+        Utils::clearScreen();
+        Utils::setBlue();
+        std::cout << "\n\n=== TURN ";
+        Utils::setYellow();
+        std::cout << currentTurn << "/" << totalTurns;
+        Utils::setBlue();
+        std::cout << " ===" << std::endl;
         
         processTurn();
         checkWinCondition();
         
         if (currentTurn >= totalTurns) {
+            Utils::setRed();
             std::cout << "\nGame Over! You've run out of turns." << std::endl;
             displayStatus();
             break;
@@ -223,7 +239,10 @@ void Game::displayStatus() const {
     Utils::reset();
 
     Utils::setGreen();
-    std::cout << "Oasis Map Fragments: " << oasisFragments << "/3" << std::endl;
+    std::cout << "Oasis Map Fragments: " << oasisFragments << "/3";
+    for (int i=0; i<oasisFragments; i++) std::cout << "█";
+    for (int i=0; i<3 - oasisFragments; i++) std::cout << "░";
+    std::cout << std::endl;
     Utils::reset();
     
     Utils::printSeparator();
@@ -237,14 +256,17 @@ void Game::displayCurrentPlanet() const {
 }
 
 void Game::displayAvailableActions() const {
-    Utils::printTitle("AVAILABLE ACTIONS");
+    Utils::printColoredTitle("AVAILABLE ACTIONS", false);
+    Utils::setGreen();
     std::cout << "1. Buy Commodity" << std::endl;
     std::cout << "2. Sell Commodity" << std::endl;
     std::cout << "3. Travel to Another Planet" << std::endl;
     std::cout << "4. Upgrade Spaceship" << std::endl;
     std::cout << "5. Repair Spaceship" << std::endl;
     std::cout << "6. Save Game" << std::endl;
+    Utils::setRed();
     std::cout << "7. Return to Main Menu" << std::endl;
+    Utils::reset();
 }
 
 void Game::buyCommodity() {
@@ -253,16 +275,27 @@ void Game::buyCommodity() {
     
     auto buyPrices = currentPlanet.getAllBuyPrices();
     if (buyPrices.empty()) {
+        Utils::setRed();
         std::cout << "No commodities available for purchase on this planet." << std::endl;
+        Utils::reset();
         return;
     }
+
     
-    Utils::printTitle("BUY COMMODITIES");
+    Utils::printColoredTitle("BUY COMMODITIES", false);
     int index = 1;
     std::vector<std::string> commodityNames;
     
     for (const auto& price : buyPrices) {
-        std::cout << index << ". " << price.first << " - $" << price.second << " each" << std::endl;
+        std::cout << index << ". ";
+        Utils::setGreen();
+        std::cout << price.first;
+        Utils::reset();
+        std::cout << " - $";
+        Utils::setYellow();
+        std::cout << price.second;
+        Utils::reset();
+        std::cout << " each" << std::endl;
         commodityNames.push_back(price.first);
         index++;
     }
@@ -402,14 +435,40 @@ void Game::travelToPlanet() {
 }
 
 void Game::upgradeSpaceship() {
-    Utils::printTitle("UPGRADE SPACESHIP");
-    std::cout << "Your money: $" << player.getMoney() << std::endl;
-    std::cout << "1. Upgrade Cargo Capacity (+20 units) - $500" << std::endl;
-    std::cout << "2. Upgrade Fuel Capacity (+50 units) - $300" << std::endl;
-    std::cout << "3. Upgrade Radiation Shield (+10 units) - $400" << std::endl;
+    Utils::printColoredTitle("UPGRADE SPACESHIP", false);
+    Utils::setCyan();
+    std::cout << "Your money: $";
+    Utils::setYellow();
+    std::cout << player.getMoney();
+    Utils::reset();
+    std::cout << std::endl;
+    Utils::printSeparator();
+    Utils::setGreen();
+    std::cout << "1. Upgrade Cargo Capacity (+20 units) - $";
+    Utils::setYellow();
+    cout << 500;
+    Utils::reset();
+    std::cout << std::endl;
+    Utils::setGreen();
+    std::cout << "2. Upgrade Fuel Capacity (+50 units) - $";
+    Utils::setYellow();
+    cout << 300;
+    Utils::reset();
+    std::cout << std::endl;
+
+    Utils::setGreen();
+    std::cout << "3. Upgrade Radiation Shield (+10 units) - $";
+    cout << 400;
+    Utils::reset();
+    std::cout << std::endl;
+    Utils::setRed();
     std::cout << "4. Cancel" << std::endl;
-    
+    Utils::reset();
+
+    Utils::printSeparator();
+    Utils::setCyan();
     std::cout << "Choose upgrade: ";
+    Utils::reset();
     int choice = Utils::getValidatedInt(1, 4);
     
     if (choice == 4) return;
