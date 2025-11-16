@@ -62,7 +62,9 @@ void Planet::discover() {
 }
 
 void Planet::displayInfo() const {
+    Utils::setBlue();
     std::cout << "\n=== PLANET INFO ===" << std::endl;
+    Utils::reset();
     std::cout << "Name: " << name << std::endl;
     std::cout << "Type: " << getTypeString() << std::endl;
     std::cout << "Status: " << (discovered ? "Discovered" : "Undiscovered") << std::endl;
