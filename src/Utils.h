@@ -21,6 +21,7 @@ namespace Utils {
     constexpr const char* COLOR_RED = "\033[31m";
     constexpr const char* COLOR_BLUE = "\033[34m";
     constexpr const char* COLOR_CYAN = "\033[36m";
+    constexpr const char* COLOR_PINK = "\033[38;5;217m";
 
     /**
      * @brief Clear the input buffer
@@ -156,6 +157,7 @@ namespace Utils {
     inline void setRed() { std::cout << COLOR_RED; }
     inline void setBlue() { std::cout << COLOR_BLUE; }
     inline void setCyan() { std::cout << COLOR_CYAN; }
+    inline void setPink() { std::cout << COLOR_PINK; }
     inline void reset() { std::cout << COLOR_RESET; }
 
 }  //
