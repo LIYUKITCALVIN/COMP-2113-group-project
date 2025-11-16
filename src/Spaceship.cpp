@@ -1,6 +1,7 @@
 #include "Spaceship.h"
 #include <iostream>
 
+
 Spaceship::Spaceship() 
     : cargoCapacity(0), maxFuel(0), currentFuel(0), 
       radiationShield(0), durability(0), maxDurability(0) {}
@@ -78,7 +79,9 @@ void Spaceship::fullRepair() {
 }
 
 void Spaceship::displayStatus() const {
+    Utils::setBlue();
     std::cout << "\n=== SPACESHIP STATUS ===" << std::endl;
+    Utils::reset();
     std::cout << "Cargo Capacity: " << cargoCapacity << " units" << std::endl;
     std::cout << "Fuel: " << currentFuel << "/" << maxFuel << std::endl;
     std::cout << "Radiation Shield: " << radiationShield << " units" << std::endl;
