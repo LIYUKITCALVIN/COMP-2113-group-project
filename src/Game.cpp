@@ -551,7 +551,10 @@ void Game::repairSpaceship() {
 void Game::saveGame() {
     std::ofstream file("savegame.txt");
     if (!file) {
-        std::cout << "Error saving game!" << std::endl;
+        Utils::setRed();
+        std::cout << "Error saving game! Please try again." << std::endl;
+        Utils::reset();
+        Utils::pressAnyKeyToContinue();
         return;
     }
     
@@ -580,7 +583,10 @@ void Game::saveGame() {
     file << std::endl;
     
     file.close();
+    Utils::setGreen();
     std::cout << "Game saved successfully!" << std::endl;
+    cout << "Your game has been saved to 'savegame.txt'!" << endl;
+    Utils::pressAnyKeyToContinue();
 }
 
 void Game::loadGame() {
