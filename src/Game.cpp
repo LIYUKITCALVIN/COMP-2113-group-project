@@ -82,6 +82,10 @@ void Game::initializeGame() {
     oasisFragments = 0;
     
     std::cout << "\nGame initialized! You have " << totalTurns << " turns to make your fortune." << std::endl;
+    Utils::setGreen();
+    cout << "Win Condition 1: Collect 3 Oasis Map Fragments (find on Nuclear Waste planets)" << endl;
+    cout << "Win Condition 2: Reach $" << (difficulty == 1 ? 10000 : difficulty == 2 ? 15000 : 20000) << " in cash" << endl;
+    Utils::reset();
     Utils::pressAnyKeyToContinue();
 }
 
@@ -124,8 +128,10 @@ void Game::initializePlanets() {
     // Nuclear waste planets - rare commodities
     planets[3].setPrice("Nuclear Alloy", 400.0, 200.0);
     planets[3].setPrice("Mutant Sample", 600.0, 300.0);
+    planets[3].setPrice("Oasis Map Fragment", 1500.0, 1000.0);
     planets[4].setPrice("Nuclear Alloy", 450.0, 220.0);
     planets[4].setPrice("Mutant Sample", 650.0, 320.0);
+    planets[4].setPrice("Oasis Map Fragment", 1800.0, 1200.0);
     
     // Oasis - high prices for everything
     planets[5].setPrice("Nuclear Alloy", 1000.0, 800.0);
@@ -148,21 +154,21 @@ void Game::setupDifficulty(int diff) {
             startCargo = 100;
             startFuel = 200;
             startShield = 50;
-            totalTurns = 60;
+            totalTurns = 30;
             break;
         case 2: // Medium
             startMoney = 1500.0;
             startCargo = 80;
             startFuel = 150;
             startShield = 40;
-            totalTurns = 50;
+            totalTurns = 25;
             break;
         case 3: // Hard
             startMoney = 1000.0;
             startCargo = 60;
             startFuel = 100;
             startShield = 30;
-            totalTurns = 40;
+            totalTurns = 20;
             break;
     }
     
@@ -180,6 +186,9 @@ void Game::gameLoop() {
         std::cout << currentTurn << "/" << totalTurns;
         Utils::setBlue();
         std::cout << " ===" << std::endl;
+        Utils::setGreen();
+        cout << "Win Target: 3 Oasis Fragments OR $" << (difficulty == 1 ? 10000 : difficulty == 2 ? 15000 : 20000) << endl;
+        Utils::reset();
         
         processTurn();
         checkWinCondition();
