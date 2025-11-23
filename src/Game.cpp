@@ -124,19 +124,35 @@ void Game::initializePlanets() {
     // Mars Colony - electronics focus
     planets[1].setPrice("Electronics", 180.0, 120.0);
     planets[1].setPrice("Food Rations", 70.0, 45.0);
+
+    // Titan Outpost
+    planets[2].setPrice("Medicine", 150.0, 100.0); 
+    planets[2].setPrice("Electronics", 200.0, 140.0);
+    planets[2].setPrice("Water", 45.0, 30.0);
+    planets[2].setPrice("Nuclear Alloy", 300.0, 250.0);
+    planets[2].setPrice("Mutant Sample", 400.0, 350.0);
     
     // Nuclear waste planets - rare commodities
+    planets[3].setPrice("Food Rations", 90.0, 75.0); 
+    planets[3].setPrice("Water", 60.0, 50.0);
+    planets[3].setPrice("Medicine", 180.0, 150.0);
     planets[3].setPrice("Nuclear Alloy", 400.0, 200.0);
     planets[3].setPrice("Mutant Sample", 600.0, 300.0);
     planets[3].setPrice("Oasis Map Fragment", 1500.0, 1000.0);
+    planets[4].setPrice("Food Rations", 95.0, 80.0);
+    planets[4].setPrice("Water", 65.0, 55.0); 
+    planets[4].setPrice("Medicine", 190.0, 160.0);
     planets[4].setPrice("Nuclear Alloy", 450.0, 220.0);
     planets[4].setPrice("Mutant Sample", 650.0, 320.0);
     planets[4].setPrice("Oasis Map Fragment", 1800.0, 1200.0);
     
     // Oasis - high prices for everything
+    planets[5].setPrice("Food Rations", 200.0, 180.0); 
+    planets[5].setPrice("Water", 150.0, 130.0);
+    planets[5].setPrice("Medicine", 300.0, 280.0);
     planets[5].setPrice("Nuclear Alloy", 1000.0, 800.0);
     planets[5].setPrice("Mutant Sample", 1500.0, 1200.0);
-    planets[5].setPrice("Oasis Map Fragment", 2000.0, 1500.0);
+    planets[5].setPrice("Oasis Map Fragment", 5000.0, 0.0);
     
     // Discover starting planets
 for (int i = 0; i < 5; i++) {  // 发现前5个，不包括Oasis
