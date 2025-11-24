@@ -415,8 +415,10 @@ void Game::sellCommodity() {
 
 void Game::travelToPlanet() {
     int currentPlanetId = player.getCurrentPlanet();
-    
+
+    Utils::setBlue();
     Utils::printTitle("TRAVEL TO PLANET");
+    Utils::reset();
     std::cout << "Available planets:" << std::endl;
     
     for (size_t i = 0; i < planets.size(); i++) {
