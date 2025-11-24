@@ -71,7 +71,8 @@ void Event::execute(Player& player, Spaceship& ship, Game& game) {
         std::cout << "You obtained: " << itemEffect << std::endl;
         player.addToInventory(itemEffect, 1);
         if (itemEffect == "Oasis Map Fragment") {
-            game.oasisFragments++;
+            //game.oasisFragments++;
+            game.addOasisFragment(1);
             
             Utils::setPink();
             std::cout << "🎉 Collected 1 Oasis Map Fragment!" << std::endl;
