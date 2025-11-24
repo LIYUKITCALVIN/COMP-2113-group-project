@@ -420,7 +420,7 @@ void Game::travelToPlanet() {
     std::cout << "Available planets:" << std::endl;
     
     for (size_t i = 0; i < planets.size(); i++) {
-        if (i != static_cast<size_t>(currentPlanetId） && planets[i].isDiscovered()) {
+        if (i != static_cast<size_t>(currentPlanetId) && planets[i].isDiscovered()) {
             int distance = planets[i].getDistance();
             int fuelCost = calculateFuelCost(currentPlanetId, i);
             std::cout << i << ". " << planets[i].getName() << " (" << planets[i].getTypeString() 
