@@ -195,6 +195,8 @@ void Game::setupDifficulty(int diff) {
 }
 
 void Game::gameLoop() {
+    currentTurn = 0;
+    gameRunning = true;
     while (currentTurn < totalTurns && gameRunning) {
         currentTurn++;
         Utils::clearScreen();
@@ -207,14 +209,16 @@ void Game::gameLoop() {
         Utils::setGreen();
         cout << "Win Target: 3 Oasis Fragments OR $" << (difficulty == 1 ? 10000 : difficulty == 2 ? 15000 : 20000) << endl;
         Utils::reset();
+
         
         processTurn();
         checkWinCondition();
-        
-        if (currentTurn >= totalTurns) {
+
+        if (currentTurn >= totalTurns && gameRunning) { 
             Utils::setRed();
             std::cout << "\nGame Over! You've run out of turns." << std::endl;
             displayStatus();
+            Utils::reset();
             break;
         }
     }
@@ -254,6 +258,10 @@ void Game::processTurn() {
             std::cout << "Game saved. Returning to main menu." << std::endl;
             break;
     }
+    if (gameRunning) {
+        checkWinCondition();
+    }
+    currentTurn++;
 }
 
 void Game::displayStatus() const {
@@ -698,18 +706,22 @@ void Game::checkWinCondition() {
     }
     
     if (player.getMoney() >= moneyTarget) {
+        Utils::setRed();
         std::cout << "\n*** CONGRATULATIONS! ***" << std::endl;
         std::cout << "You've achieved the financial target of $" << moneyTarget << "!" << std::endl;
         std::cout << "You win!" << std::endl;
+        Utils::reset();
         gameRunning = false;
         return;
     }
     
     // Check Oasis win condition
     if (oasisFragments >= 3) {
+        Utils::setRed();
         std::cout << "\n*** ULTIMATE VICTORY! ***" << std::endl;
         std::cout << "You've collected all 3 Oasis Map Fragments!" << std::endl;
         std::cout << "You've discovered the legendary Oasis planet and achieved the perfect ending!" << std::endl;
+        Utils::reset();
         gameRunning = false;
         return;
     }
@@ -726,4 +738,18 @@ int Game::calculateFuelCost(int fromPlanet, int toPlanet) const {
     
     // Fuel cost is the absolute difference in distance
     return std::abs(toDistance - fromDistance);
+}
+void Game::addOasisFragment(int count) {
+    oasisFragments += count;
+    if (oasisFragments > 3) {
+        oasisFragments = 3;
+    }
+    checkOasisUnlock(); 
+
+    if (oasisFragments >= 3 && gameRunning) {
+        displayVictoryMessage();
+        gameRunning = false; 
+        std::cout << "\nPress Enter to exit..." << std::endl;
+        std::cin.ignore();
+    }
 }
