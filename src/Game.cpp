@@ -463,7 +463,7 @@ void Game::travelToPlanet() {
     PlanetType currentType = planets[currentPlanetId].getType();
     PlanetType destType = planets[destination].getType();
     Event randomEvent = Event::generateRandomEvent(currentType, destType);
-    randomEvent.execute(player, spaceship);
+    randomEvent.execute(player, spaceship, *this);
     
     // Discover the planet if it wasn't already
     planets[destination].discover();
