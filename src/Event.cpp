@@ -1,4 +1,5 @@
 #include "Event.h"
+#include "Game.h"
 #include <iostream>
 #include <random>
 #include <vector>
