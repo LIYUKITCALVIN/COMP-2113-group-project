@@ -371,8 +371,11 @@ void Game::sellCommodity() {
         std::cout << "You have no commodities to sell." << std::endl;
         return;
     }
-    
+
+    Utils::setBlue();
     Utils::printTitle("SELL COMMODITIES");
+    Utils::reset();
+    
     int index = 1;
     std::vector<std::string> commodityNames;
     
