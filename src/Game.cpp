@@ -274,7 +274,7 @@ void Game::displayStatus() const {
 
 void Game::displayCurrentPlanet() const {
     int currentPlanetId = player.getCurrentPlanet();
-    if (currentPlanetId >= 0 && currentPlanetId < planets.size()) {
+    if (currentPlanetId >= 0 && static_cast<size_t>(currentPlanetId) < planets.size()) {
         planets[currentPlanetId].displayInfo();
     }
 }
@@ -420,7 +420,7 @@ void Game::travelToPlanet() {
     std::cout << "Available planets:" << std::endl;
     
     for (size_t i = 0; i < planets.size(); i++) {
-        if (i != currentPlanetId && planets[i].isDiscovered()) {
+        if (i != static_cast<size_t>(currentPlanetId） && planets[i].isDiscovered()) {
             int distance = planets[i].getDistance();
             int fuelCost = calculateFuelCost(currentPlanetId, i);
             std::cout << i << ". " << planets[i].getName() << " (" << planets[i].getTypeString() 
@@ -706,8 +706,8 @@ void Game::checkWinCondition() {
 }
 
 int Game::calculateFuelCost(int fromPlanet, int toPlanet) const {
-    if (fromPlanet < 0 || fromPlanet >= planets.size() || 
-        toPlanet < 0 || toPlanet >= planets.size()) {
+    if (fromPlanet < 0 || static_cast<size_t>(fromPlanet) >= planets.size() || 
+        toPlanet < 0 || static_cast<size_t>(toPlanet) >= planets.size()) {
         return 0;
     }
     
