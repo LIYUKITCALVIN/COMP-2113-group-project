@@ -63,6 +63,14 @@ public:
     bool loadGameFromFile(const std::string& filename);
     void checkWinCondition();
     int calculateFuelCost(int fromPlanet, int toPlanet) const;
+
+    void addOasisFragment(int count = 1) {
+        oasisFragments += count;
+        if (oasisFragments > 3) oasisFragments = 3;
+    }
+    int getOasisFragments() const {
+        return oasisFragments;
+    }
 };
 
 #endif
