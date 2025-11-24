@@ -80,6 +80,7 @@ public:
     void addOasisFragment(int count = 1) {
         oasisFragments += count;
         if (oasisFragments > 3) oasisFragments = 3;
+        checkOasisUnlock();
     }
     int getOasisFragments() const {
         return oasisFragments;
