@@ -78,6 +78,7 @@ void Event::execute(Player& player, Spaceship& ship, Game& game) {
             std::cout << "🎉 Collected 1 Oasis Map Fragment!" << std::endl;
             std::cout << "Current Fragments: " << game.getOasisFragments() << "/3" << std::endl;
             Utils::reset();
+        }
     }
 }
 
