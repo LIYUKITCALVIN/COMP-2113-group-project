@@ -353,7 +353,10 @@ void Game::buyCommodity() {
         player.addToInventory(selectedCommodity, quantity);
         
         if (selectedCommodity == "Oasis Map Fragment") {
-            oasisFragments += quantity; // 数量一般是1，直接加quantity更灵活
+            oasisFragments += quantity;
+            if (oasisFragments > 3) oasisFragments = 3;
+            checkOasisUnlock(); 
+            
             Utils::setPink();
             std::cout << "🎉 Collected " << quantity << " Oasis Map Fragment(s)!" << std::endl;
             std::cout << "Current Fragments: " << oasisFragments << "/3" << std::endl;
