@@ -1,3 +1,4 @@
+cpp
 #ifndef UTILS_H
 #define UTILS_H
 
@@ -151,7 +152,40 @@ namespace Utils {
         system("clear"); 
     }
 
-    //
+    // 新添加的UI功能
+    /**
+     * @brief Print a progress bar
+     * @param current Current value
+     * @param max Maximum value  
+     * @param width Width of the bar
+     */
+    inline void printProgressBar(int current, int max, int width = 20) {
+        float percentage = static_cast<float>(current) / max;
+        int filled = static_cast<int>(width * percentage);
+        
+        std::cout << "[";
+        for (int i = 0; i < width; ++i) {
+            if (i < filled) std::cout << "█";
+            else std::cout << "░";
+        }
+        std::cout << "] " << static_cast<int>(percentage * 100) << "%";
+    }
+
+    /**
+     * @brief Animate text printing
+     * @param text Text to animate
+     * @param delayMs Delay between characters
+     */
+    inline void animateText(const std::string& text, int delayMs = 30) {
+        for (char c : text) {
+            std::cout << c << std::flush;
+            // 简单延迟
+            for (int i = 0; i < 1000000 * delayMs / 1000; ++i) {}
+        }
+        std::cout << std::endl;
+    }
+
+    // 颜色设置函数
     inline void setGreen() { std::cout << COLOR_GREEN; }
     inline void setYellow() { std::cout << COLOR_YELLOW; }
     inline void setRed() { std::cout << COLOR_RED; }
@@ -160,6 +194,6 @@ namespace Utils {
     inline void setPink() { std::cout << COLOR_PINK; }
     inline void reset() { std::cout << COLOR_RESET; }
 
-}  //
+}  // namespace Utils
 
 #endif
