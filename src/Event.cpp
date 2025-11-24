@@ -32,7 +32,7 @@ std::string Event::getTypeString() const {
     }
 }
 
-void Event::execute(Player& player, Spaceship& ship) {
+void Event::execute(Player& player, Spaceship& ship, Game& game) {
     Utils::setBlue();
     std::cout << "\n=== RANDOM EVENT ===" << std::endl;
     Utils::reset();
@@ -69,6 +69,13 @@ void Event::execute(Player& player, Spaceship& ship) {
     if (!itemEffect.empty()) {
         std::cout << "You obtained: " << itemEffect << std::endl;
         player.addToInventory(itemEffect, 1);
+        if (itemEffect == "Oasis Map Fragment") {
+            game.oasisFragments++;
+            
+            Utils::setPink();
+            std::cout << "🎉 Collected 1 Oasis Map Fragment!" << std::endl;
+            std::cout << "Current Fragments: " << game.getOasisFragments() << "/3" << std::endl;
+            Utils::reset();
     }
 }
 
