@@ -1,3 +1,4 @@
+cpp
 #include "Event.h"
 #include "Game.h"
 #include <iostream>
@@ -71,7 +72,6 @@ void Event::execute(Player& player, Spaceship& ship, Game& game) {
         std::cout << "You obtained: " << itemEffect << std::endl;
         player.addToInventory(itemEffect, 1);
         if (itemEffect == "Oasis Map Fragment") {
-            //game.oasisFragments++;
             game.addOasisFragment(1);
             
             Utils::setPink();
@@ -96,15 +96,20 @@ Event Event::generateRandomEvent(PlanetType currentPlanet, PlanetType destinatio
         return Event(EventType::NOTHING, "Your journey was uneventful.");
     }
     
-    // Define possible events with their probabilities
+    // 扩展事件
     std::vector<std::pair<int, Event>> possibleEvents = {
-        {15, Event(EventType::PIRATE_ATTACK, "Space pirates attacked your ship! They stole some of your cargo.", -500, 0, 10, "")},
-        {15, Event(EventType::RADIATION_STORM, "You encountered a radiation storm! Your ship's shields were damaged.", 0, -20, 25, "")},
-        {15, Event(EventType::FRIENDLY_TRADER, "A friendly trader shared supplies with you.", 200, 0, 0, "Food Rations")},
-        {10, Event(EventType::OASIS_MAP_FRAGMENT, "You found a fragment of an Oasis map!", 0, 0, 0, "Oasis Map Fragment")},
-        {15, Event(EventType::FUEL_LEAK, "Your ship developed a fuel leak during the journey.", 0, -30, 0, "")},
-        {15, Event(EventType::ABANDONED_CARGO, "You discovered abandoned cargo floating in space.", 0, 0, 0, "Scrap Metal")},
-        {15, Event(EventType::MUTANT_ENCOUNTER, "Mutant scavengers tried to board your ship. You fought them off but took damage.", -100, 0, 15, "")}
+        {12, Event(EventType::PIRATE_ATTACK, "Space pirates attacked your ship! They stole some of your cargo.", -500, 0, 10, "")},
+        {12, Event(EventType::RADIATION_STORM, "You encountered a radiation storm! Your ship's shields were damaged.", 0, -20, 25, "")},
+        {12, Event(EventType::FRIENDLY_TRADER, "A friendly trader shared supplies with you.", 200, 0, 0, "Food Rations")},
+        {8, Event(EventType::OASIS_MAP_FRAGMENT, "You found a fragment of an Oasis map!", 0, 0, 0, "Oasis Map Fragment")},
+        {12, Event(EventType::FUEL_LEAK, "Your ship developed a fuel leak during the journey.", 0, -30, 0, "")},
+        {12, Event(EventType::ABANDONED_CARGO, "You discovered abandoned cargo floating in space.", 0, 0, 0, "Scrap Metal")},
+        {12, Event(EventType::MUTANT_ENCOUNTER, "Mutant scavengers tried to board your ship. You fought them off but took damage.", -100, 0, 15, "")},
+        // 新事件
+        {10, Event(EventType::FRIENDLY_TRADER, "You helped repair a damaged trader ship. They rewarded you generously!", 400, 0, 0, "")},
+        {10, Event(EventType::ABANDONED_CARGO, "You found a cargo pod with rare electronics!", 0, 0, 0, "Electronics")},
+        {5, Event(EventType::FRIENDLY_TRADER, "A medical ship shared their supplies with you!", 0, 0, 0, "Medicine")},
+        {5, Event(EventType::PIRATE_ATTACK, "You outsmarted the pirates and took some of their fuel!", 0, 40, 5, "")}
     };
     
     // Select random event based on weights
