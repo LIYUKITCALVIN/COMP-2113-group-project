@@ -85,6 +85,9 @@ public:
     int getOasisFragments() const {
         return oasisFragments;
     }
+    bool checkVictory() const; 
+    void displayVictoryMessage();
+    void displayGameOverMessage();
 };
 
 #endif
