@@ -5,13 +5,10 @@
 #include "Player.h"
 #include "Spaceship.h"
 
-// 前向声明 PlanetType
 enum class PlanetType;
 
-/**
- * @enum EventType
- * @brief Types of random events that can occur during travel
- */
+class Game;
+
 enum class EventType {
     PIRATE_ATTACK,      // Lose money/cargo
     RADIATION_STORM,    // Ship damage
@@ -49,7 +46,7 @@ public:
     std::string getTypeString() const;
     
     // Apply event effects to player and ship
-    void execute(Player& player, Spaceship& ship);
+    void execute(Player& player, Spaceship& ship, Game& game);
     
     // Static method to generate random event
     static Event generateRandomEvent(PlanetType currentPlanet, PlanetType destinationPlanet);
