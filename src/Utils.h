@@ -178,7 +178,6 @@ namespace Utils {
     inline void animateText(const std::string& text, int delayMs = 30) {
         for (char c : text) {
             std::cout << c << std::flush;
-            // 简单延迟
             for (int i = 0; i < 1000000 * delayMs / 1000; ++i) {}
         }
         std::cout << std::endl;
