@@ -13,6 +13,17 @@ Nuclear Ashes: Space Trader, with text interaction at its core, creates an immer
 
 Interstellar travel is never smooth: random crises such as pirate raids and radiation storms are full of hidden dangers, and every choice is related to survival and profit. And upgrading the spaceship's armor, engine or cargo hold with trade profits will be the key for you to break through dangerous situations. The game takes "planetary trade → interstellar navigation → crisis response → spaceship upgrade → goal achievement" as its core cycle, ingeniously integrating strategic planning with random variables. Through pure text narrative, it sketches a vast interstellar picture, ultimately guiding you towards the peak of wealth or a mysterious ultimate ending.
 
+**Nuclear Ashes: Space Trader** is a text-based strategy game set in a post-nuclear galaxy—civilizations cling to survival amid star-system ruins, and you step into the role of an interstellar merchant.
+
+Your journey starts on a stable habitable planet: armed with a basic spaceship and meager resources, your goal is simple: claim victory by 🎯**collecting 3 Oasis Map Fragments** (to unlock the mythical Oasis planet) or 💰 **hitting a difficulty-tailored money target** (to become a galactic tycoon).
+
+Travel between three distinct planet types:
+- 🌍 Habitable Colonies: Safe hubs to buy low-cost basic commodities (food, water).
+- ☢️ Nuclear Wastelands: High-risk black markets where rare goods fetch massive profits—but random crises (pirate raids, radiation storms) lurk around every jump.
+- 🏜️ The Oasis: A scarce resource paradise (unlocked by 2 fragments) where you can buy the final map piece or sell goods for unrivaled gains.
+
+Balance trade (buy low, sell high), upgrade your spaceship (cargo hold, armor, fuel capacity), and manage resources (durability, fuel) to outlast the turns. Every choice carries risk and reward—will you survive the nuclear ashes to claim your victory?
+
 ## 3. Core Features
 
   i. Multi-dimensional planet system: Three types of planets (habitable/nuclear waste/Oasis), with significant price differences for goods on each planet, supporting dynamic price adjustment and simulating real trade logic;
