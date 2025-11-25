@@ -15,14 +15,14 @@ Interstellar travel is never smooth: random crises such as pirate raids and radi
 
 **Nuclear Ashes: Space Trader** is a text-based strategy game set in a post-nuclear galaxy—civilizations cling to survival amid star-system ruins, and you step into the role of an interstellar merchant.
 
-Your journey starts on a stable habitable planet: armed with a basic spaceship and meager resources, your goal is simple: claim victory by 🎯**collecting 3 Oasis Map Fragments** (to unlock the mythical Oasis planet) or 💰 **hitting a difficulty-tailored money target** (to become a galactic tycoon).
+Your journey starts on a stable habitable planet: armed with a basic spaceship and limited resources, your goal is simple: claim victory by 🎯**collecting 3 Oasis Map Fragments** (to unlock the mythical Oasis planet) or 💰 **hitting a difficulty-tailored money target** (to become a galactic tycoon). Your can select one of three difficulty levels (Easy/Medium/Hard) that tailors the money victory target, amount of available turns and random event intensity.
 
 Travel between three distinct planet types:
 - 🌍 Habitable Colonies: Safe hubs to buy low-cost basic commodities (food, water).
 - ☢️ Nuclear Wastelands: High-risk black markets where rare goods fetch massive profits—but random crises (pirate raids, radiation storms) lurk around every jump.
 - 🏜️ The Oasis: A scarce resource paradise (unlocked by 2 fragments) where you can buy the final map piece or sell goods for unrivaled gains.
 
-Balance trade (buy low, sell high), upgrade your spaceship (cargo hold, armor, fuel capacity), and manage resources (durability, fuel) to outlast the turns. Every choice carries risk and reward—will you survive the nuclear ashes to claim your victory?
+You’ll have a **fixed number of turns** to achieve your goal- fail to collect all fragments or hit the money target before turns run out, and the game ends. Balance trade (buy low, sell high), upgrade your spaceship 🚀(cargo hold, armor, fuel capacity), and manage resources (durability, fuel) to outlast the turns. Every choice carries risk and reward—will you survive the nuclear ashes to claim your victory?
 
 ## 3. Core Features
 
