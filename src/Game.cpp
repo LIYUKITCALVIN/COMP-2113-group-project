@@ -745,6 +745,10 @@ void Game::addOasisFragment(int count) {
         oasisFragments = 3;
     }
     checkOasisUnlock(); 
+    
+void Game::displayVictoryMessage(){
+    cout<< "You Win This Game!!!!!" << endl;
+}
 
     if (oasisFragments >= 3 && gameRunning) {
         displayVictoryMessage();
@@ -752,7 +756,4 @@ void Game::addOasisFragment(int count) {
         std::cout << "\nPress Enter to exit..." << std::endl;
         std::cin.ignore();
     }
-}
-void Game::displayVictoryMessage(){
-    cout<< "You Win" << endl;
 }
