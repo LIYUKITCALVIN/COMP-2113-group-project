@@ -77,7 +77,7 @@ public:
     void checkWinCondition();
     int calculateFuelCost(int fromPlanet, int toPlanet) const;
 
-    void addOasisFragment(int count = 1)；
+    void addOasisFragment(int count = 1);
     int getOasisFragments() const {
         return oasisFragments;
     }
