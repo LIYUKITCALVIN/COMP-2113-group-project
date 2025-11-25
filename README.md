@@ -1,4 +1,6 @@
 # COMP-2113-group-project
+Nuclear Ashes: Space Trader
+
 1. Team Members
 
 Han Jiale Jonathan 3036390279
