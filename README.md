@@ -4,8 +4,8 @@
 
 ## 1. Team Members
 
-Han Jiale Jonathan 3036390279
-Ding Yushan 3036453124
+Han Jiale Jonathan 3036390279;
+Ding Yushan 3036453124;
 
 ## 2. Application Description
 
