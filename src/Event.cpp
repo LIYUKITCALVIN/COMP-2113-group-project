@@ -1,4 +1,3 @@
-cpp
 #include "Event.h"
 #include "Game.h"
 #include <iostream>
