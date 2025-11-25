@@ -747,7 +747,15 @@ void Game::addOasisFragment(int count) {
     checkOasisUnlock(); 
     
 void Game::displayVictoryMessage(){
-    cout<< "You Win This Game!!!!!" << endl;
+    cout << "You Win This Game!!!!!" << endl;
+    cout << " Collect Oasis Fragments to Clear the Level " << endl;
+    cout << "🎉 ultimate victory! The legend has come to an end! 🎉" << endl;
+    cout << "When the last fragment of the Oasis map was embedded in the console" << endl;
+    cout << "the fog on the star map instantly dissipated " << endl;
+    cout << "he legendary oasis planet shone brightly in the depths of the universe." << endl;
+    cout << "You brave the ravages of radiation storms, resist the plundering of pirates" << endl;
+    cout << "search for clues in the perilous situation of the nuclear waste planet" << endl;
+    cout << "and piece together the path to hope with courage and wisdom." << endl;
 }
 
     if (oasisFragments >= 3 && gameRunning) {
