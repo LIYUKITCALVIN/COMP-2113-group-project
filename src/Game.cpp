@@ -753,3 +753,6 @@ void Game::addOasisFragment(int count) {
         std::cin.ignore();
     }
 }
+void Game::displayVictoryMessage(){
+    cout<< "You Win" << endl;
+}
