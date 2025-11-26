@@ -6,7 +6,7 @@
 
 Han Jiale Jonathan 3036390279;  
 Ding Yushan 3036453124
-
+Li Yukit 3036392497
 ## 2. Application Description
 
 Nuclear Ashes: Space Trader, with text interaction at its core, creates an immersive space trade adventure. The embers of nuclear war have soaked the stars, and civilizations are reconstructing their routes in the ruins. You will transform into an interstellar merchant, piloting spaceships to travel through three types of planets with distinct characteristics: the stable trade markets of habitable planets, the high-risk black markets of nuclear waste planets, and the scarce resource production areas of oasis planets. Accumulate your initial capital in the game of buying low and selling high.
