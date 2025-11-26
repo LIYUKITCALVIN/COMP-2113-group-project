@@ -745,6 +745,7 @@ void Game::addOasisFragment(int count) {
         oasisFragments = 3;
     }
     checkOasisUnlock(); 
+}
     
 void Game::displayVictoryMessage(){
     cout << "You Win This Game!!!!!" << endl;
