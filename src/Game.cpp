@@ -757,7 +757,7 @@ void Game::displayVictoryMessage(){
     cout << "You brave the ravages of radiation storms, resist the plundering of pirates" << endl;
     cout << "search for clues in the perilous situation of the nuclear waste planet" << endl;
     cout << "and piece together the path to hope with courage and wisdom." << endl;
-}
+
 
     if (oasisFragments >= 3 && gameRunning) {
         displayVictoryMessage();
