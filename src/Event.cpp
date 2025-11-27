@@ -6,19 +6,24 @@
 #include "Planet.h" 
 #include "Utils.h"
 
+// Initializes event with specified type, description and effects
+// Input:Type of the random event; Narrative description; Money change amount; Fuel change amount;Ship damage amount; Item obtained
 Event::Event(EventType eventType, const std::string& eventDesc, 
              double money, int fuel, int damage, const std::string& item)
     : type(eventType), description(eventDesc), moneyEffect(money), 
       fuelEffect(fuel), damageEffect(damage), itemEffect(item) {}
 
+// Gets the event's type (enum)
 EventType Event::getType() const {
     return type;
 }
 
+// Gets the event's narrative description
 std::string Event::getDescription() const {
     return description;
 }
 
+// Converts event type (enum) to human-readable string
 std::string Event::getTypeString() const {
     switch(type) {
         case EventType::PIRATE_ATTACK: return "Pirate Attack";
@@ -33,6 +38,8 @@ std::string Event::getTypeString() const {
     }
 }
 
+// Executes the event: Applies money/fuel/damage/item effects to player and spaceship
+// Input: Reference to player object (to modify money/inventory); Reference to spaceship (to modify fuel/durability);Reference to game object (to update Oasis fragments)
 void Event::execute(Player& player, Spaceship& ship, Game& game) {
     Utils::setBlue();
     std::cout << "\n=== RANDOM EVENT ===" << std::endl;
@@ -81,6 +88,9 @@ void Event::execute(Player& player, Spaceship& ship, Game& game) {
     }
 }
 
+// Generates a random event based on current and destination planet types
+// Input:Type of the planet being departed; Type of the planet being traveled to
+// Output: Randomly selected event (with higher risk for nuclear waste planets)
 Event Event::generateRandomEvent(PlanetType currentPlanet, PlanetType destinationPlanet) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -95,7 +105,7 @@ Event Event::generateRandomEvent(PlanetType currentPlanet, PlanetType destinatio
         return Event(EventType::NOTHING, "Your journey was uneventful.");
     }
     
-    // 扩展事件
+    // Expand events
     std::vector<std::pair<int, Event>> possibleEvents = {
         {12, Event(EventType::PIRATE_ATTACK, "Space pirates attacked your ship! They stole some of your cargo.", -500, 0, 10, "")},
         {12, Event(EventType::RADIATION_STORM, "You encountered a radiation storm! Your ship's shields were damaged.", 0, -20, 25, "")},
@@ -104,7 +114,7 @@ Event Event::generateRandomEvent(PlanetType currentPlanet, PlanetType destinatio
         {12, Event(EventType::FUEL_LEAK, "Your ship developed a fuel leak during the journey.", 0, -30, 0, "")},
         {12, Event(EventType::ABANDONED_CARGO, "You discovered abandoned cargo floating in space.", 0, 0, 0, "Scrap Metal")},
         {12, Event(EventType::MUTANT_ENCOUNTER, "Mutant scavengers tried to board your ship. You fought them off but took damage.", -100, 0, 15, "")},
-        // 新事件
+        // new events
         {10, Event(EventType::FRIENDLY_TRADER, "You helped repair a damaged trader ship. They rewarded you generously!", 400, 0, 0, "")},
         {10, Event(EventType::ABANDONED_CARGO, "You found a cargo pod with rare electronics!", 0, 0, 0, "Electronics")},
         {5, Event(EventType::FRIENDLY_TRADER, "A medical ship shared their supplies with you!", 0, 0, 0, "Medicine")},
