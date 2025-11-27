@@ -4,14 +4,9 @@
 #include <iomanip>
 
 // Constructor: Initialize the basic properties of the planetary object 
-// Parameters: 
-// planetId - Unique Identification ID of a planet 
-// planetName - Name of a planet 
-// planetType - PlanetType (Enumeration Type PlanetType) 
-// distance - The number of light years from the starting point of the planet
-
-Planet::Planet(int planetId, const std::string& planetName, PlanetType planetType, int distance)
-    : id(planetId), name(planetName), type(planetType), discovered(false), distanceFromStart(distance) {}
+Planet::Planet(int planetId, const std::string& planetName, PlanetType planetType, int distance, double volatility)
+    : id(planetId), name(planetName), type(planetType), discovered(false), 
+      distanceFromStart(distance), priceVolatility(volatility) {}
 
 // Obtain the planet ID
 int Planet::getId() const {
@@ -98,5 +93,19 @@ void Planet::displayInfo() const {
             std::cout << "  - " << price.first << ": Buy $" << std::fixed << std::setprecision(2) 
                       << price.second << " | Sell $" << sellPrices.at(price.first) << std::endl;
         }
+    }
+}
+
+// 价格更新方法
+void Planet::updatePrices() {
+    for (auto& price : buyPrices) {
+        double change = 0.8 + (Utils::randomDouble(0.0, 0.4) * priceVolatility);
+        price.second *= change;
+        if (price.second < 1.0) price.second = 1.0;
+    }
+    for (auto& price : sellPrices) {
+        double change = 0.8 + (Utils::randomDouble(0.0, 0.4) * priceVolatility);
+        price.second *= change;
+        if (price.second < 1.0) price.second = 1.0;
     }
 }
