@@ -6,8 +6,10 @@
 #include <iomanip>
 using namespace std;
 
+// Game class constructor: Initializes core game state variables
 Game::Game() : gameRunning(false), totalTurns(50), currentTurn(0), difficulty(1), oasisFragments(0) {}
 
+//Starts the main menu loop
 void Game::run() {
     gameRunning = true;
     while (gameRunning) {
@@ -15,6 +17,7 @@ void Game::run() {
     }
 }
 
+// Displays the main menu: Provides options for New Game/Load Game/Exit
 void Game::mainMenu() {
     Utils::clearScreen();
     
@@ -49,6 +52,7 @@ void Game::mainMenu() {
     }
 }
 
+// Starts a new game: Lets player select difficulty, initializes game state, and enters game loop
 void Game::newGame() {
     Utils::clearScreen();
     Utils::printColoredTitle("NEW GAME", false);
@@ -70,6 +74,7 @@ void Game::newGame() {
     gameLoop();
 }
 
+// Initializes core game data: Commodities, planets, player, and spaceship based on difficulty
 void Game::initializeGame() {
     // Initialize commodities and planets
     initializeCommodities();
@@ -89,6 +94,7 @@ void Game::initializeGame() {
     Utils::pressAnyKeyToContinue();
 }
 
+// Initializes all tradable commodities
 void Game::initializeCommodities() {
     commodities.clear();
     
@@ -104,6 +110,7 @@ void Game::initializeCommodities() {
     commodities["Oasis Map Fragment"] = Commodity("Oasis Map Fragment", "Piece of the Oasis map", 1000.0, 10);
 }
 
+// Initializes all planets: Creates planet instances and sets commodity buy/sell prices for each
 void Game::initializePlanets() {
     planets.clear();
     
@@ -162,6 +169,9 @@ for (int i = 0; i < 5; i++) {  // 发现前5个，不包括Oasis
 }
 }
 
+// Sets initial player money and spaceship attributes based on selected difficulty
+// Input: Difficulty level (1=Easy, 2=Medium, 3=Hard)
+// Output: No return value
 void Game::setupDifficulty(int diff) {
     double startMoney;
     int startCargo, startFuel, startShield;
@@ -194,6 +204,7 @@ void Game::setupDifficulty(int diff) {
     spaceship.initialize(startCargo, startFuel, startShield);
 }
 
+//Main game loop: Controls turn's progression, status display, and win/lose condition checking
 void Game::gameLoop() {
     currentTurn = 0;
     gameRunning = true;
@@ -226,6 +237,7 @@ void Game::gameLoop() {
     Utils::pressAnyKeyToContinue();
 }
 
+// For each single turn: Displays status, shows available actions and executes player's choice
 void Game::processTurn() {
     displayStatus();
     displayCurrentPlanet();
@@ -264,6 +276,7 @@ void Game::processTurn() {
     currentTurn++;
 }
 
+// To display current player status: Money, spaceship attributes, and Oasis Map Fragment progress
 void Game::displayStatus() const {
     Utils::setBlue();
     player.displayStatus();
@@ -282,6 +295,7 @@ void Game::displayStatus() const {
     Utils::printSeparator();
 }
 
+// To display information about the current planet
 void Game::displayCurrentPlanet() const {
     int currentPlanetId = player.getCurrentPlanet();
     if (currentPlanetId >= 0 && static_cast<size_t>(currentPlanetId) < planets.size()) {
@@ -289,6 +303,7 @@ void Game::displayCurrentPlanet() const {
     }
 }
 
+// To displays available actions
 void Game::displayAvailableActions() const {
     Utils::printColoredTitle("AVAILABLE ACTIONS", false);
     Utils::setGreen();
@@ -303,6 +318,7 @@ void Game::displayAvailableActions() const {
     Utils::reset();
 }
 
+// Buys commodities: Shows available items → lets player select item/quantity → deducts money and adds to inventory
 void Game::buyCommodity() {
     int currentPlanetId = player.getCurrentPlanet();
     Planet& currentPlanet = planets[currentPlanetId];
@@ -375,6 +391,7 @@ void Game::buyCommodity() {
     }
 }
 
+// Sells commodities: Shows inventory items, lets player select item/quantity, adds money and removes from inventory
 void Game::sellCommodity() {
     int currentPlanetId = player.getCurrentPlanet();
     Planet& currentPlanet = planets[currentPlanetId];
@@ -429,6 +446,7 @@ void Game::sellCommodity() {
     }
 }
 
+// Travels between planets: Shows available destinations, checks fuel, consumes fuel and triggers random events
 void Game::travelToPlanet() {
     int currentPlanetId = player.getCurrentPlanet();
 
@@ -484,6 +502,7 @@ void Game::travelToPlanet() {
     Utils::pressAnyKeyToContinue();
 }
 
+// Upgrades spaceship: provides cargo/fuel/shield upgrades, deducts money and update
 void Game::upgradeSpaceship() {
     Utils::printColoredTitle("UPGRADE SPACESHIP", false);
     Utils::setCyan();
@@ -558,6 +577,7 @@ void Game::upgradeSpaceship() {
     }
 }
 
+// Repairs spaceship: Calculates damage,shows repair cost, deducts money and restores durability
 void Game::repairSpaceship() {
     Utils::setBlue();
     Utils::printTitle("REPAIR SPACESHIP");
@@ -599,6 +619,7 @@ void Game::repairSpaceship() {
     }
 }
 
+// Saves game state: Writes difficulty, turns, player, spaceship, and planet data to savegame.txt
 void Game::saveGame() {
     std::ofstream file("savegame.txt");
     if (!file) {
@@ -640,6 +661,7 @@ void Game::saveGame() {
     Utils::pressAnyKeyToContinue();
 }
 
+// Loads game state: reads data from savegame.txt and restores player, spaceship, and planet states
 void Game::loadGame() {
     std::ifstream file("savegame.txt");
     if (!file) {
@@ -727,6 +749,7 @@ void Game::checkWinCondition() {
     }
 }
 
+// Calculates fuel cost based on distance difference between two planets
 int Game::calculateFuelCost(int fromPlanet, int toPlanet) const {
     if (fromPlanet < 0 || static_cast<size_t>(fromPlanet) >= planets.size() || 
         toPlanet < 0 || static_cast<size_t>(toPlanet) >= planets.size()) {
@@ -739,6 +762,9 @@ int Game::calculateFuelCost(int fromPlanet, int toPlanet) const {
     // Fuel cost is the absolute difference in distance
     return std::abs(toDistance - fromDistance);
 }
+
+// Adds Oasis Map Fragments (caps at 3 if exceeding)
+// Input(count): no of fragments to add
 void Game::addOasisFragment(int count) {
     oasisFragments += count;
     if (oasisFragments > 3) {
@@ -746,7 +772,8 @@ void Game::addOasisFragment(int count) {
     }
     checkOasisUnlock(); 
 }
-    
+
+// Displays victory message: Outputs full victory narrative text
 void Game::displayVictoryMessage(){
     cout << "You Win This Game!!!!!" << endl;
     cout << " Collect Oasis Fragments to Clear the Level " << endl;
