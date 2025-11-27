@@ -1,4 +1,4 @@
-# COMP-2113-group-project# COMP-2113-group-project
+# COMP-2113-group-project
 
 # Nuclear Ashes: Space Trader🛸
 
