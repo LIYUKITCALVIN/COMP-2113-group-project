@@ -1,6 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
-
+// Various header files
 #include "Player.h"
 #include "Spaceship.h"
 #include "Planet.h"
@@ -28,7 +28,7 @@ private:
     int difficulty; // 1: Easy, 2: Medium, 3: Hard
     int oasisFragments; // Progress toward Oasis ending
 
-     void checkOasisUnlock() {
+     void checkOasisUnlock() { // The discovery event of the Oasis Planet
         if (!planets[5].isDiscovered() && oasisFragments >= 2) {
             planets[5].discover(); //
             Utils::setGreen();
