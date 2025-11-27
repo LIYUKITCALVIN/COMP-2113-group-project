@@ -114,13 +114,13 @@ void Game::initializeCommodities() {
 void Game::initializePlanets() {
     planets.clear();
     
-    // Create planets
-    planets.push_back(Planet(0, "Earth Haven", PlanetType::HABITABLE, 0));
-    planets.push_back(Planet(1, "Mars Colony", PlanetType::HABITABLE, 5));
-    planets.push_back(Planet(2, "Titan Outpost", PlanetType::HABITABLE, 10));
-    planets.push_back(Planet(3, "Chernobyl Prime", PlanetType::NUCLEAR_WASTE, 8));
-    planets.push_back(Planet(4, "Fukushima Belt", PlanetType::NUCLEAR_WASTE, 12));
-    planets.push_back(Planet(5, "The Oasis", PlanetType::OASIS, 20));
+    // Create planets with price volatility factor
+    planets.push_back(Planet(0, "Earth Haven", PlanetType::HABITABLE, 0, 1.0));
+    planets.push_back(Planet(1, "Mars Colony", PlanetType::HABITABLE, 5, 1.2));
+    planets.push_back(Planet(2, "Titan Outpost", PlanetType::HABITABLE, 10, 1.5));
+    planets.push_back(Planet(3, "Chernobyl Prime", PlanetType::NUCLEAR_WASTE, 8, 2.0));
+    planets.push_back(Planet(4, "Fukushima Belt", PlanetType::NUCLEAR_WASTE, 12, 2.5));
+    planets.push_back(Planet(5, "The Oasis", PlanetType::OASIS, 20, 3.0));
     
     // Set prices for each planet
     // Earth Haven - basic commodities
@@ -164,14 +164,12 @@ void Game::initializePlanets() {
     planets[5].setPrice("Oasis Map Fragment", 5000.0, 0.0);
     
     // Discover starting planets
-for (int i = 0; i < 5; i++) {  // 发现前5个，不包括Oasis
-    planets[i].discover();
-}
+    for (int i = 0; i < 5; i++) {  // 发现前5个，不包括Oasis
+        planets[i].discover();
+    }
 }
 
 // Sets initial player money and spaceship attributes based on selected difficulty
-// Input: Difficulty level (1=Easy, 2=Medium, 3=Hard)
-// Output: No return value
 void Game::setupDifficulty(int diff) {
     double startMoney;
     int startCargo, startFuel, startShield;
@@ -221,6 +219,17 @@ void Game::gameLoop() {
         cout << "Win Target: 3 Oasis Fragments OR $" << (difficulty == 1 ? 10000 : difficulty == 2 ? 15000 : 20000) << endl;
         Utils::reset();
 
+        // 每3回合更新一次市场价格
+        if (currentTurn % 3 == 0 && currentTurn > 0) {
+            for (auto& planet : planets) {
+                if (planet.isDiscovered()) {
+                    planet.updatePrices();
+                }
+            }
+            Utils::setYellow();
+            std::cout << "Market prices have changed across the galaxy!" << std::endl;
+            Utils::reset();
+        }
         
         processTurn();
         checkWinCondition();
@@ -270,10 +279,10 @@ void Game::processTurn() {
             std::cout << "Game saved. Returning to main menu." << std::endl;
             break;
     }
+    
     if (gameRunning) {
         checkWinCondition();
     }
-    currentTurn++;
 }
 
 // To display current player status: Money, spaceship attributes, and Oasis Map Fragment progress
@@ -285,11 +294,11 @@ void Game::displayStatus() const {
     spaceship.displayStatus();
     Utils::reset();
 
+    // 使用新的进度条显示
     Utils::setGreen();
-    std::cout << "Oasis Map Fragments: " << oasisFragments << "/3";
-    for (int i=0; i<oasisFragments; i++) std::cout << "█";
-    for (int i=0; i<3 - oasisFragments; i++) std::cout << "░";
-    std::cout << std::endl;
+    std::cout << "Oasis Map Fragments: ";
+    Utils::printProgressBar(oasisFragments, 3, 10);
+    std::cout << " (" << oasisFragments << "/3)" << std::endl;
     Utils::reset();
     
     Utils::printSeparator();
@@ -343,7 +352,7 @@ void Game::buyCommodity() {
         Utils::reset();
         std::cout << " - $";
         Utils::setYellow();
-        std::cout << price.second;
+        std::cout << std::fixed << std::setprecision(2) << price.second;
         Utils::reset();
         std::cout << " each" << std::endl;
         commodityNames.push_back(price.first);
@@ -359,8 +368,8 @@ void Game::buyCommodity() {
     double price = currentPlanet.getBuyPrice(selectedCommodity);
     
     std::cout << "How many units of " << selectedCommodity << " do you want to buy? ";
-    std::cout << "Price: $" << price << " each" << std::endl;
-    std::cout << "Your money: $" << player.getMoney() << std::endl;
+    std::cout << "Price: $" << std::fixed << std::setprecision(2) << price << " each" << std::endl;
+    std::cout << "Your money: $" << std::fixed << std::setprecision(2) << player.getMoney() << std::endl;
     std::cout << "Available cargo space: " << (spaceship.getCargoCapacity() - player.getTotalCargo()) << std::endl;
     
     int maxAffordable = static_cast<int>(player.getMoney() / price);
@@ -377,18 +386,19 @@ void Game::buyCommodity() {
         player.addToInventory(selectedCommodity, quantity);
         
         if (selectedCommodity == "Oasis Map Fragment") {
-            oasisFragments += quantity;
-            if (oasisFragments > 3) oasisFragments = 3;
-            checkOasisUnlock(); 
-            
+            addOasisFragment(quantity);
             Utils::setPink();
-            std::cout << "🎉 Collected " << quantity << " Oasis Map Fragment(s)!" << std::endl;
+            std::cout << "Collected " << quantity << " Oasis Map Fragment(s)!" << std::endl;
             std::cout << "Current Fragments: " << oasisFragments << "/3" << std::endl;
             Utils::reset();
         }
         
-        std::cout << "Bought " << quantity << " units of " << selectedCommodity << " for $" << totalCost << std::endl;
+        Utils::setGreen();
+        std::cout << "SUCCESS: Bought " << quantity << " units of " << selectedCommodity << " for $" << std::fixed << std::setprecision(2) << totalCost << std::endl;
+        Utils::reset();
     }
+    
+    Utils::pressAnyKeyToContinue();
 }
 
 // Sells commodities: Shows inventory items, lets player select item/quantity, adds money and removes from inventory
@@ -398,20 +408,23 @@ void Game::sellCommodity() {
     
     auto inventory = player.getInventory();
     if (inventory.empty()) {
+        Utils::setRed();
         std::cout << "You have no commodities to sell." << std::endl;
+        Utils::reset();
         return;
     }
 
-    Utils::setBlue();
-    Utils::printTitle("SELL COMMODITIES");
-    Utils::reset();
-    
+    Utils::printColoredTitle("SELL COMMODITIES", false);
     int index = 1;
     std::vector<std::string> commodityNames;
     
     for (const auto& item : inventory) {
         double sellPrice = currentPlanet.getSellPrice(item.first);
-        std::cout << index << ". " << item.first << " - " << item.second << " units - $" << sellPrice << " each" << std::endl;
+        std::cout << index << ". " << item.first << " - " << item.second << " units - $";
+        Utils::setYellow();
+        std::cout << std::fixed << std::setprecision(2) << sellPrice;
+        Utils::reset();
+        std::cout << " each" << std::endl;
         commodityNames.push_back(item.first);
         index++;
     }
@@ -427,7 +440,7 @@ void Game::sellCommodity() {
     
     std::cout << "How many units of " << selectedCommodity << " do you want to sell? ";
     std::cout << "Available: " << availableQuantity << " units" << std::endl;
-    std::cout << "Sell price: $" << sellPrice << " each" << std::endl;
+    std::cout << "Sell price: $" << std::fixed << std::setprecision(2) << sellPrice << " each" << std::endl;
     
     int quantity = Utils::getValidatedInt(0, availableQuantity);
     
@@ -436,31 +449,50 @@ void Game::sellCommodity() {
         player.setMoney(player.getMoney() + totalEarned);
         player.removeFromInventory(selectedCommodity, quantity);
         
-        std::cout << "Sold " << quantity << " units of " << selectedCommodity << " for $" << totalEarned << std::endl;
+        Utils::setGreen();
+        std::cout << "SUCCESS: Sold " << quantity << " units of " << selectedCommodity << " for $" << std::fixed << std::setprecision(2) << totalEarned << std::endl;
+        Utils::reset();
         
-        // Check if selling Oasis map fragment
+        // 修复：卖出绿洲碎片应该减少计数
         if (selectedCommodity == "Oasis Map Fragment") {
-            oasisFragments++;
-            std::cout << "You've collected " << oasisFragments << "/3 Oasis Map Fragments!" << std::endl;
+            oasisFragments -= quantity;
+            if (oasisFragments < 0) oasisFragments = 0;
+            Utils::setPink();
+            std::cout << "You've sold " << quantity << " Oasis Map Fragments!" << std::endl;
+            std::cout << "Remaining Fragments: " << oasisFragments << "/3" << std::endl;
+            Utils::reset();
         }
     }
+    
+    Utils::pressAnyKeyToContinue();
 }
 
 // Travels between planets: Shows available destinations, checks fuel, consumes fuel and triggers random events
 void Game::travelToPlanet() {
     int currentPlanetId = player.getCurrentPlanet();
 
-    Utils::setBlue();
-    Utils::printTitle("TRAVEL TO PLANET");
-    Utils::reset();
+    Utils::printColoredTitle("TRAVEL TO PLANET", false);
     std::cout << "Available planets:" << std::endl;
     
     for (size_t i = 0; i < planets.size(); i++) {
         if (i != static_cast<size_t>(currentPlanetId) && planets[i].isDiscovered()) {
             int distance = planets[i].getDistance();
             int fuelCost = calculateFuelCost(currentPlanetId, i);
-            std::cout << i << ". " << planets[i].getName() << " (" << planets[i].getTypeString() 
-                      << ") - Distance: " << distance << " - Fuel Cost: " << fuelCost << std::endl;
+            
+            std::cout << i << ". ";
+            Utils::setCyan();
+            std::cout << planets[i].getName();
+            Utils::reset();
+            std::cout << " (" << planets[i].getTypeString() 
+                      << ") - Distance: " << distance << " - Fuel Cost: " << fuelCost;
+            
+            // 显示燃料是否足够
+            if (spaceship.getCurrentFuel() < fuelCost) {
+                Utils::setRed();
+                std::cout << " [NOT ENOUGH FUEL]";
+                Utils::reset();
+            }
+            std::cout << std::endl;
         }
     }
     
@@ -469,17 +501,24 @@ void Game::travelToPlanet() {
     
     if (destination == currentPlanetId) {
         std::cout << "Travel cancelled." << std::endl;
+        Utils::pressAnyKeyToContinue();
         return;
     }
     
     if (!planets[destination].isDiscovered()) {
+        Utils::setRed();
         std::cout << "This planet hasn't been discovered yet!" << std::endl;
+        Utils::reset();
+        Utils::pressAnyKeyToContinue();
         return;
     }
     
     int fuelCost = calculateFuelCost(currentPlanetId, destination);
     if (spaceship.getCurrentFuel() < fuelCost) {
+        Utils::setRed();
         std::cout << "Not enough fuel! Need " << fuelCost << " but only have " << spaceship.getCurrentFuel() << std::endl;
+        Utils::reset();
+        Utils::pressAnyKeyToContinue();
         return;
     }
     
@@ -487,8 +526,10 @@ void Game::travelToPlanet() {
     spaceship.consumeFuel(fuelCost);
     player.setCurrentPlanet(destination);
     
+    Utils::setGreen();
     std::cout << "Traveling to " << planets[destination].getName() << "..." << std::endl;
     std::cout << "Fuel consumed: " << fuelCost << ". Remaining fuel: " << spaceship.getCurrentFuel() << std::endl;
+    Utils::reset();
     
     // Generate and execute random event
     PlanetType currentType = planets[currentPlanetId].getType();
@@ -505,39 +546,47 @@ void Game::travelToPlanet() {
 // Upgrades spaceship: provides cargo/fuel/shield upgrades, deducts money and update
 void Game::upgradeSpaceship() {
     Utils::printColoredTitle("UPGRADE SPACESHIP", false);
+    
     Utils::setCyan();
     std::cout << "Your money: $";
     Utils::setYellow();
-    std::cout << player.getMoney();
+    std::cout << std::fixed << std::setprecision(2) << player.getMoney();
     Utils::reset();
     std::cout << std::endl;
+    
     Utils::printSeparator();
+    
+    // 升级选项1
     Utils::setGreen();
     std::cout << "1. Upgrade Cargo Capacity (+20 units) - $";
     Utils::setYellow();
-    cout << 500;
+    cout << "500";
     Utils::reset();
     std::cout << std::endl;
+    
+    // 升级选项2
     Utils::setGreen();
     std::cout << "2. Upgrade Fuel Capacity (+50 units) - $";
     Utils::setYellow();
-    cout << 300;
+    cout << "300";
     Utils::reset();
     std::cout << std::endl;
 
+    // 升级选项3
     Utils::setGreen();
     std::cout << "3. Upgrade Radiation Shield (+10 units) - $";
-    cout << 400;
+    Utils::setYellow();
+    cout << "400";
     Utils::reset();
     std::cout << std::endl;
+    
+    // 取消选项
     Utils::setRed();
     std::cout << "4. Cancel" << std::endl;
     Utils::reset();
 
     Utils::printSeparator();
-    Utils::setCyan();
     std::cout << "Choose upgrade: ";
-    Utils::reset();
     int choice = Utils::getValidatedInt(1, 4);
     
     if (choice == 4) return;
@@ -549,9 +598,13 @@ void Game::upgradeSpaceship() {
             if (player.getMoney() >= cost) {
                 player.setMoney(player.getMoney() - cost);
                 spaceship.upgradeCargo(20);
-                std::cout << "Cargo capacity upgraded by 20 units!" << std::endl;
+                Utils::setGreen();
+                std::cout << "SUCCESS: Cargo capacity upgraded by 20 units!" << std::endl;
+                Utils::reset();
             } else {
+                Utils::setRed();
                 std::cout << "Not enough money!" << std::endl;
+                Utils::reset();
             }
             break;
         case 2:
@@ -559,9 +612,13 @@ void Game::upgradeSpaceship() {
             if (player.getMoney() >= cost) {
                 player.setMoney(player.getMoney() - cost);
                 spaceship.upgradeFuel(50);
-                std::cout << "Fuel capacity upgraded by 50 units!" << std::endl;
+                Utils::setGreen();
+                std::cout << "SUCCESS: Fuel capacity upgraded by 50 units!" << std::endl;
+                Utils::reset();
             } else {
+                Utils::setRed();
                 std::cout << "Not enough money!" << std::endl;
+                Utils::reset();
             }
             break;
         case 3:
@@ -569,34 +626,43 @@ void Game::upgradeSpaceship() {
             if (player.getMoney() >= cost) {
                 player.setMoney(player.getMoney() - cost);
                 spaceship.upgradeShield(10);
-                std::cout << "Radiation shield upgraded by 10 units!" << std::endl;
+                Utils::setGreen();
+                std::cout << "SUCCESS: Radiation shield upgraded by 10 units!" << std::endl;
+                Utils::reset();
             } else {
+                Utils::setRed();
                 std::cout << "Not enough money!" << std::endl;
+                Utils::reset();
             }
             break;
     }
+    
+    Utils::pressAnyKeyToContinue();
 }
 
 // Repairs spaceship: Calculates damage,shows repair cost, deducts money and restores durability
 void Game::repairSpaceship() {
-    Utils::setBlue();
-    Utils::printTitle("REPAIR SPACESHIP");
-    Utils::reset();
+    Utils::printColoredTitle("REPAIR SPACESHIP", false);
     
     int damage = spaceship.getMaxDurability() - spaceship.getDurability();
     if (damage == 0) {
+        Utils::setGreen();
         std::cout << "Your spaceship is already at full durability!" << std::endl;
+        Utils::reset();
+        Utils::pressAnyKeyToContinue();
         return;
     }
     
     double repairCost = damage * 10.0; // $10 per durability point
     std::cout << "Damage: " << damage << " points" << std::endl;
-    std::cout << "Repair cost: $" << repairCost << std::endl;
-    std::cout << "Your money: $" << player.getMoney() << std::endl;
+    std::cout << "Repair cost: $" << std::fixed << std::setprecision(2) << repairCost << std::endl;
+    std::cout << "Your money: $" << std::fixed << std::setprecision(2) << player.getMoney() << std::endl;
     
     if (player.getMoney() < repairCost) {
+        Utils::setYellow();
         std::cout << "Not enough money for full repair!" << std::endl;
         std::cout << "You can repair " << static_cast<int>(player.getMoney() / 10) << " points." << std::endl;
+        Utils::reset();
         
         std::cout << "How many durability points to repair? (0 to cancel): ";
         int repairPoints = Utils::getValidatedInt(0, static_cast<int>(player.getMoney() / 10));
@@ -605,18 +671,24 @@ void Game::repairSpaceship() {
             double partialCost = repairPoints * 10.0;
             player.setMoney(player.getMoney() - partialCost);
             spaceship.repair(repairPoints);
-            std::cout << "Repaired " << repairPoints << " durability points for $" << partialCost << std::endl;
+            Utils::setGreen();
+            std::cout << "SUCCESS: Repaired " << repairPoints << " durability points for $" << std::fixed << std::setprecision(2) << partialCost << std::endl;
+            Utils::reset();
         }
     } else {
-        std::cout << "Perform full repair for $" << repairCost << "? (1=Yes, 0=No): ";
+        std::cout << "Perform full repair for $" << std::fixed << std::setprecision(2) << repairCost << "? (1=Yes, 0=No): ";
         int confirm = Utils::getValidatedInt(0, 1);
         
         if (confirm == 1) {
             player.setMoney(player.getMoney() - repairCost);
             spaceship.fullRepair();
-            std::cout << "Spaceship fully repaired!" << std::endl;
+            Utils::setGreen();
+            std::cout << "SUCCESS: Spaceship fully repaired!" << std::endl;
+            Utils::reset();
         }
     }
+    
+    Utils::pressAnyKeyToContinue();
 }
 
 // Saves game state: Writes difficulty, turns, player, spaceship, and planet data to savegame.txt
@@ -656,8 +728,9 @@ void Game::saveGame() {
     
     file.close();
     Utils::setGreen();
-    std::cout << "Game saved successfully!" << std::endl;
+    std::cout << "SUCCESS: Game saved successfully!" << std::endl;
     cout << "Your game has been saved to 'savegame.txt'!" << endl;
+    Utils::reset();
     Utils::pressAnyKeyToContinue();
 }
 
@@ -665,7 +738,10 @@ void Game::saveGame() {
 void Game::loadGame() {
     std::ifstream file("savegame.txt");
     if (!file) {
+        Utils::setRed();
         std::cout << "No saved game found!" << std::endl;
+        Utils::reset();
+        Utils::pressAnyKeyToContinue();
         return;
     }
     
@@ -693,7 +769,6 @@ void Game::loadGame() {
         int cargo, maxFuel, currentFuel, shield, durability;
         file >> cargo >> maxFuel >> currentFuel >> shield >> durability;
         spaceship.initialize(cargo, maxFuel, shield);
-        // Note: We'll need to add methods to set current fuel and durability
         
         // Load planet discovery status
         for (size_t i = 0; i < planets.size(); i++) {
@@ -705,11 +780,16 @@ void Game::loadGame() {
         }
         
         file.close();
-        std::cout << "Game loaded successfully!" << std::endl;
+        Utils::setGreen();
+        std::cout << "SUCCESS: Game loaded successfully!" << std::endl;
+        Utils::reset();
         gameLoop();
         
     } catch (const std::exception& e) {
+        Utils::setRed();
         std::cout << "Error loading saved game: " << e.what() << std::endl;
+        Utils::reset();
+        Utils::pressAnyKeyToContinue();
     }
 }
 
@@ -728,23 +808,22 @@ void Game::checkWinCondition() {
     }
     
     if (player.getMoney() >= moneyTarget) {
-        Utils::setRed();
+        Utils::setGreen();
         std::cout << "\n*** CONGRATULATIONS! ***" << std::endl;
-        std::cout << "You've achieved the financial target of $" << moneyTarget << "!" << std::endl;
-        std::cout << "You win!" << std::endl;
+        std::cout << "You've achieved the financial target of $" << std::fixed << std::setprecision(2) << moneyTarget << "!" << std::endl;
+        std::cout << "You become the wealthiest space trader in the galaxy!" << std::endl;
+        std::cout << "YOU WIN!" << std::endl;
         Utils::reset();
         gameRunning = false;
+        Utils::pressAnyKeyToContinue();
         return;
     }
     
     // Check Oasis win condition
     if (oasisFragments >= 3) {
-        Utils::setRed();
-        std::cout << "\n*** ULTIMATE VICTORY! ***" << std::endl;
-        std::cout << "You've collected all 3 Oasis Map Fragments!" << std::endl;
-        std::cout << "You've discovered the legendary Oasis planet and achieved the perfect ending!" << std::endl;
-        Utils::reset();
+        displayVictoryMessage();
         gameRunning = false;
+        Utils::pressAnyKeyToContinue();
         return;
     }
 }
@@ -764,7 +843,6 @@ int Game::calculateFuelCost(int fromPlanet, int toPlanet) const {
 }
 
 // Adds Oasis Map Fragments (caps at 3 if exceeding)
-// Input(count): no of fragments to add
 void Game::addOasisFragment(int count) {
     oasisFragments += count;
     if (oasisFragments > 3) {
@@ -775,21 +853,26 @@ void Game::addOasisFragment(int count) {
 
 // Displays victory message: Outputs full victory narrative text
 void Game::displayVictoryMessage(){
-    cout << "You Win This Game!!!!!" << endl;
-    cout << " Collect Oasis Fragments to Clear the Level " << endl;
-    cout << "🎉 ultimate victory! The legend has come to an end! 🎉" << endl;
-    cout << "When the last fragment of the Oasis map was embedded in the console" << endl;
+    Utils::setPink();
+    cout << "\n*** ULTIMATE VICTORY! ***" << endl;
+    cout << "You've collected all 3 Oasis Map Fragments!" << endl;
+    cout << "You've discovered the legendary Oasis planet and achieved the perfect ending!" << endl;
+    cout << "\nWhen the last fragment of the Oasis map was embedded in the console" << endl;
     cout << "the fog on the star map instantly dissipated " << endl;
-    cout << "he legendary oasis planet shone brightly in the depths of the universe." << endl;
+    cout << "the legendary oasis planet shone brightly in the depths of the universe." << endl;
     cout << "You brave the ravages of radiation storms, resist the plundering of pirates" << endl;
     cout << "search for clues in the perilous situation of the nuclear waste planet" << endl;
     cout << "and piece together the path to hope with courage and wisdom." << endl;
+    cout << "YOU WIN!" << endl;
+    Utils::reset();
+}
 
+bool Game::checkVictory() const {
+    return oasisFragments >= 3 || player.getMoney() >= (difficulty == 1 ? 10000 : difficulty == 2 ? 15000 : 20000);
+}
 
-    if (oasisFragments >= 3 && gameRunning) {
-        displayVictoryMessage();
-        gameRunning = false; 
-        std::cout << "\nPress Enter to exit..." << std::endl;
-        std::cin.ignore();
-    }
+void Game::displayGameOverMessage() {
+    Utils::setRed();
+    std::cout << "\nGame Over! You've run out of turns." << std::endl;
+    Utils::reset();
 }
