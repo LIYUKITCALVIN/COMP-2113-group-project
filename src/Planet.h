@@ -29,10 +29,11 @@ private:
     std::map<std::string, double> sellPrices; // commodity -> sell price
     bool discovered;
     int distanceFromStart; // for fuel calculation
+    double priceVolatility; // 价格波动因子
 
 public:
     // Constructor
-    Planet(int planetId, const std::string& planetName, PlanetType planetType, int distance);
+    Planet(int planetId, const std::string& planetName, PlanetType planetType, int distance, double volatility = 1.0);
     
     // Getters
     int getId() const;
@@ -48,6 +49,9 @@ public:
     double getSellPrice(const std::string& commodity) const;
     const std::map<std::string, double>& getAllBuyPrices() const;
     const std::map<std::string, double>& getAllSellPrices() const;
+    
+    // 价格更新方法
+    void updatePrices();
     
     // Discovery
     void discover();
