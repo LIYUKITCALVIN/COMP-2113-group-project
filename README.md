@@ -1,6 +1,6 @@
 # COMP-2113-group-project# COMP-2113-group-project
 
-# Nuclear Ashes: Space Trader
+# Nuclear Ashes: Space Trader🛸
 
 ## 1. Team Members
 
