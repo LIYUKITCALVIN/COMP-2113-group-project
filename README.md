@@ -6,7 +6,7 @@
 
 Han Jiale Jonathan (3036390279)   
 Ding Yushan (3036453124)  
-Li Yukit (3036392497)
+Li Yukit (3036392497)  
 Liao Ruochen （3036260589）
 
 ## 2. Game Description
